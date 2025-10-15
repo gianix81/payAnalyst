@@ -2,21 +2,30 @@
 <html lang="it">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
+    />
     <title>Analizzatore Buste Paga AI</title>
 
     <!-- Manifest PWA -->
     <link rel="manifest" href="/manifest.json" />
     <meta name="theme-color" content="#2563eb" />
 
-    <!-- Optional: favicon -->
+    <!-- Favicon -->
     <link rel="icon" type="image/png" href="/favicon.ico" />
+
+    <!-- Fix per iOS “notch” e full screen -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   </head>
 
-  <body class="bg-gray-100 text-gray-800">
-    <div id="root"></div>
+  <body
+    class="bg-gray-100 text-gray-800 overflow-x-hidden min-h-[100dvh] flex flex-col items-center justify-center"
+  >
+    <div id="root" class="w-full max-w-[640px] px-4"></div>
 
-    <!-- Punto di ingresso per Vite -->
+    <!-- Entry point per Vite -->
     <script type="module" src="/src/index.tsx"></script>
 
     <!-- Service Worker -->
@@ -25,8 +34,12 @@
         window.addEventListener("load", () => {
           navigator.serviceWorker
             .register("/sw.js")
-            .then(reg => console.log("Service Worker registrato:", reg.scope))
-            .catch(err => console.log("Service Worker errore:", err));
+            .then((reg) =>
+              console.log("Service Worker registrato:", reg.scope)
+            )
+            .catch((err) =>
+              console.log("Service Worker errore:", err)
+            );
         });
       }
     </script>
