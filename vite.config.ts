@@ -5,15 +5,15 @@ import react from '@vitejs/plugin-react';
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, '.', '');
   return {
-    base: './', // ✅ importantissimo per i percorsi relativi
+    base: './',
     server: {
       port: 3000,
       host: '0.0.0.0',
     },
     build: {
-      outDir: 'dist', // ✅ specifica la directory di output
-      assetsDir: 'assets', // ✅ dove salvare JS/CSS
-      emptyOutDir: true, // ✅ pulisce la vecchia dist prima del rebuild
+      outDir: 'dist',
+      assetsDir: 'assets',
+      emptyOutDir: false,
     },
     plugins: [react()],
     define: {
@@ -22,7 +22,7 @@ export default defineConfig(({ mode }) => {
     },
     resolve: {
       alias: {
-        '@': path.resolve(__dirname, '.'),
+        '@': path.resolve(__dirname, './src'),
       },
     },
   };
