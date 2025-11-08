@@ -10,135 +10,96 @@ import Settings from './components/Settings.tsx';
 import ShiftPlanner from './components/ShiftPlanner.tsx';
 import LeavePlanner from './components/LeavePlanner.tsx';
 import AdminPanel from './components/AdminPanel.tsx';
+import Spinner from './components/common/Spinner.tsx';
 import { View, Payslip, User, Shift, LeavePlan, Absence } from './types.ts';
+import { auth, onAuthStateChanged, signOut } from './services/firebase.ts';
+import * as firestoreService from './services/firestoreService.ts';
 
 const App: React.FC = () => {
     const [currentView, setCurrentView] = useState<View>(View.Dashboard);
-    
-    const [user, setUser] = useState<User | null>(() => {
-        try {
-            const item = window.localStorage.getItem('gioia_user');
-            const parsedItem = item ? JSON.parse(item) : null;
-            if (parsedItem && typeof parsedItem === 'object' && 'firstName' in parsedItem) {
-                return parsedItem;
-            }
-            if(item) window.localStorage.removeItem('gioia_user');
-            return null;
-        } catch (error) {
-            console.error("Error reading user from localStorage", error);
-            window.localStorage.removeItem('gioia_user');
-            return null;
-        }
-    });
+    const [user, setUser] = useState<User | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
 
-    const [payslips, setPayslips] = useState<Payslip[]>(() => {
-         try {
-            const item = window.localStorage.getItem('gioia_payslips');
-            return item ? JSON.parse(item) : [];
-        } catch (error) {
-            console.error("Error reading payslips from localStorage", error);
-            window.localStorage.removeItem('gioia_payslips');
-            return [];
-        }
-    });
-    
-    const [shifts, setShifts] = useState<Shift[]>(() => {
-        try {
-            const item = window.localStorage.getItem('gioia_shifts');
-            return item ? JSON.parse(item) : [];
-        } catch (error) {
-            console.error("Error reading shifts from localStorage", error);
-            window.localStorage.removeItem('gioia_shifts');
-            return [];
-        }
-    });
+    const [payslips, setPayslips] = useState<Payslip[]>([]);
+    const [shifts, setShifts] = useState<Shift[]>([]);
+    const [leavePlans, setLeavePlans] = useState<LeavePlan[]>([]);
+    const [absences, setAbsences] = useState<Absence[]>([]);
 
-    const [leavePlans, setLeavePlans] = useState<LeavePlan[]>(() => {
-        try {
-            const item = window.localStorage.getItem('gioia_leave_plans');
-            return item ? JSON.parse(item) : [];
-        } catch (error) {
-            console.error("Error reading leave plans from localStorage", error);
-            window.localStorage.removeItem('gioia_leave_plans');
-            return [];
-        }
-    });
-
-    const [absences, setAbsences] = useState<Absence[]>(() => {
-        try {
-            const item = window.localStorage.getItem('gioia_absences');
-            return item ? JSON.parse(item) : [];
-        } catch (error) {
-            console.error("Error reading absences from localStorage", error);
-            window.localStorage.removeItem('gioia_absences');
-            return [];
-        }
-    });
-
-
-    const [selectedPayslip, setSelectedPayslip] = useState<Payslip | null>(payslips.length > 0 ? payslips[0] : null);
+    const [selectedPayslip, setSelectedPayslip] = useState<Payslip | null>(null);
     const [payslipsToCompare, setPayslipsToCompare] = useState<[Payslip, Payslip] | null>(null);
     const [alert, setAlert] = useState<string | null>(null);
 
     useEffect(() => {
-        try {
-            if (user) {
-                window.localStorage.setItem('gioia_user', JSON.stringify(user));
+        const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+            if (firebaseUser) {
+                let userProfile = await firestoreService.getUserProfile(firebaseUser.uid);
+
+                if (!userProfile) {
+                    const isAdmin = firebaseUser.email?.toLowerCase() === 'gderosa@ymail.com' || firebaseUser.email?.toLowerCase() === 'gcarandente@gmail.com';
+                    const nameParts = firebaseUser.displayName?.split(' ') || ['Nuovo', 'Utente'];
+                    const firstName = nameParts[0];
+                    const lastName = nameParts.slice(1).join(' ');
+
+                    const newUser: Omit<User, 'uid'> = {
+                        email: firebaseUser.email!,
+                        firstName,
+                        lastName,
+                        role: isAdmin ? 'admin' : 'user',
+                        dateOfBirth: '',
+                        placeOfBirth: '',
+                    };
+                    await firestoreService.saveUserProfile(firebaseUser.uid, newUser);
+                    userProfile = { ...newUser, uid: firebaseUser.uid };
+                }
+                setUser({ ...userProfile, uid: firebaseUser.uid });
             } else {
-                 window.localStorage.removeItem('gioia_user');
+                setUser(null);
+                setPayslips([]);
+                setShifts([]);
+                setLeavePlans([]);
+                setAbsences([]);
+                setSelectedPayslip(null);
             }
-        } catch (error) {
-            console.error("Error saving user to localStorage", error);
-        }
-    }, [user]);
+            setIsLoading(false);
+        });
+        return () => unsubscribe();
+    }, []);
 
     useEffect(() => {
-        try {
-            window.localStorage.setItem('gioia_payslips', JSON.stringify(payslips));
-        } catch (error) {
-            console.error("Error saving payslips to localStorage", error);
-        }
-    }, [payslips]);
-    
-    useEffect(() => {
-        try {
-            window.localStorage.setItem('gioia_shifts', JSON.stringify(shifts));
-        } catch (error) {
-            console.error("Error saving shifts to localStorage", error);
-        }
-    }, [shifts]);
+        if (!user) return;
 
-    useEffect(() => {
-        try {
-            window.localStorage.setItem('gioia_leave_plans', JSON.stringify(leavePlans));
-        } catch (error) {
-            console.error("Error saving leave plans to localStorage", error);
-        }
-    }, [leavePlans]);
-    
-    useEffect(() => {
-        try {
-            window.localStorage.setItem('gioia_absences', JSON.stringify(absences));
-        } catch (error) {
-            console.error("Error saving absences to localStorage", error);
-        }
-    }, [absences]);
+        const unsubPayslips = firestoreService.getPayslips(user.uid, (data) => {
+            setPayslips(data);
+             if (data.length > 0 && (!selectedPayslip || !data.some(p => p.id === selectedPayslip.id))) {
+                setSelectedPayslip(data[0]);
+            } else if (data.length === 0) {
+                setSelectedPayslip(null);
+            }
+        });
+        const unsubShifts = firestoreService.getShifts(user.uid, setShifts);
+        const unsubAbsences = firestoreService.getAbsences(user.uid, setAbsences);
+        const unsubLeavePlans = firestoreService.getLeavePlans(user.uid, setLeavePlans);
+        
+        return () => {
+            unsubPayslips();
+            unsubShifts();
+            unsubAbsences();
+            unsubLeavePlans();
+        };
+    }, [user, selectedPayslip]);
+
 
     const handleAnalysisComplete = (newPayslip: Payslip) => {
-        const namesMatch = user &&
-            (user.role === 'admin' || 
+        if (!user) return;
+        
+        const namesMatch = user.role === 'admin' || 
             (newPayslip.employee.firstName.trim().toLowerCase() === user.firstName.trim().toLowerCase() &&
-             newPayslip.employee.lastName.trim().toLowerCase() === user.lastName.trim().toLowerCase()));
+             newPayslip.employee.lastName.trim().toLowerCase() === user.lastName.trim().toLowerCase());
 
         setSelectedPayslip(newPayslip);
 
         if (namesMatch) {
-            const updatedPayslips = [...payslips, newPayslip].sort((a, b) => {
-                const dateA = new Date(a.period.year, a.period.month - 1);
-                const dateB = new Date(b.period.year, b.period.month - 1);
-                return dateB.getTime() - dateA.getTime();
-            });
-            setPayslips(updatedPayslips);
+            firestoreService.addPayslip(user.uid, newPayslip);
             setAlert(null);
         } else {
             setAlert("Attenzione: I dati anagrafici sulla busta paga non corrispondono al tuo profilo. Questa analisi è temporanea e non verrà salvata nell'archivio.");
@@ -159,122 +120,76 @@ const App: React.FC = () => {
     }
     
     const handleDeletePayslip = (payslipId: string) => {
-        const updatedPayslips = payslips.filter(p => p.id !== payslipId);
-        setPayslips(updatedPayslips);
-        if(selectedPayslip?.id === payslipId){
-           setSelectedPayslip(updatedPayslips.length > 0 ? updatedPayslips[0] : null);
-        }
-        if (currentView === View.Dashboard && updatedPayslips.length === 0) {
-            setSelectedPayslip(null);
-        }
+        if (!user) return;
+        firestoreService.deletePayslip(user.uid, payslipId);
     }
     
-    // FIX: Corrected the type of updatedUserData to match the onSave prop in SettingsProps.
-    const handleUpdateUser = (updatedUserData: Omit<User, 'role' | 'email' | 'password'>) => {
-        setUser(prevUser => {
-            if (!prevUser) return null;
-            const newUser = { ...prevUser, ...updatedUserData };
-            return newUser;
-        });
+    const handleUpdateUser = (updatedUserData: Omit<User, 'uid' | 'role' | 'email'>) => {
+        if (!user) return;
+        const updatedProfile: User = { ...user, ...updatedUserData };
+        firestoreService.saveUserProfile(user.uid, updatedProfile);
+        setUser(updatedProfile);
     };
 
-    // FIX: Added the handlePasswordChange function to update the user's password state.
-    const handlePasswordChange = (newPassword: string): Promise<void> => {
-        return new Promise((resolve) => {
-             setUser(prevUser => {
-                if (!prevUser) return null;
-                return { ...prevUser, password: newPassword };
-            });
-            resolve();
-        });
-    };
-
-    const handleSaveShift = (shift: Shift) => {
-        setShifts(prev => {
-            const existing = prev.find(s => s.date === shift.date);
-            if(existing) {
-                 return prev.map(s => s.date === shift.date ? {...shift, id: existing.id } : s);
-            }
-            const index = prev.findIndex(s => s.id === shift.id);
-            if (index !== -1) {
-                const updated = [...prev];
-                updated[index] = shift;
-                return updated;
-            }
-            return [...prev, shift];
-        });
-        setAbsences(prev => prev.filter(a => a.date !== shift.date));
+    const handleSaveShift = async (shift: Shift) => {
+        if (!user) return;
+        await firestoreService.saveShift(user.uid, shift);
+        // Se c'è un'assenza per lo stesso giorno, la rimuoviamo
+        const existingAbsence = absences.find(a => a.date === shift.date);
+        if (existingAbsence) {
+            await firestoreService.deleteAbsence(user.uid, existingAbsence.id);
+        }
     };
 
     const handleDeleteShift = (shiftId: string) => {
-        setShifts(prev => prev.filter(s => s.id !== shiftId));
+        if (!user) return;
+        firestoreService.deleteShift(user.uid, shiftId);
     };
 
     const handleSaveLeavePlan = (plan: LeavePlan) => {
-        setLeavePlans(prev => {
-            const index = prev.findIndex(p => p.id === plan.id);
-            if (index !== -1) {
-                const updated = [...prev];
-                updated[index] = plan;
-                return updated;
-            }
-            return [...prev, plan];
-        });
+        if (!user) return;
+        firestoreService.saveLeavePlan(user.uid, plan);
     };
 
     const handleDeleteLeavePlan = (planId: string) => {
-        setLeavePlans(prev => prev.filter(p => p.id !== planId));
+        if (!user) return;
+        firestoreService.deleteLeavePlan(user.uid, planId);
     };
 
-    const handleSaveAbsence = (absence: Absence) => {
-        setAbsences(prev => {
-            const existing = prev.find(a => a.date === absence.date);
-             if(existing) {
-                 return prev.map(a => a.date === absence.date ? {...absence, id: existing.id } : a);
-            }
-            const index = prev.findIndex(a => a.id === absence.id);
-            if (index !== -1) {
-                const updated = [...prev];
-                updated[index] = absence;
-                return updated;
-            }
-            return [...prev, absence];
-        });
-        setShifts(prev => prev.filter(s => s.date !== absence.date));
+    const handleSaveAbsence = async (absence: Absence) => {
+        if (!user) return;
+        await firestoreService.saveAbsence(user.uid, absence);
+        // Se c'è un turno per lo stesso giorno, lo rimuoviamo
+        const existingShift = shifts.find(s => s.date === absence.date);
+        if (existingShift) {
+           await firestoreService.deleteShift(user.uid, existingShift.id);
+        }
     };
 
     const handleDeleteAbsence = (absenceId: string) => {
-        setAbsences(prev => prev.filter(a => a.id !== absenceId));
+        if (!user) return;
+        firestoreService.deleteAbsence(user.uid, absenceId);
     };
 
-    const handleLogout = () => {
-        window.localStorage.removeItem('gioia_user');
-        window.localStorage.removeItem('gioia_payslips');
-        window.localStorage.removeItem('gioia_shifts');
-        window.localStorage.removeItem('gioia_leave_plans');
-        window.localStorage.removeItem('gioia_absences');
-
-        setUser(null);
-        setPayslips([]);
-        setShifts([]);
-        setLeavePlans([]);
-        setAbsences([]);
-        setSelectedPayslip(null);
-        setPayslipsToCompare(null);
-        setAlert(null);
-        setCurrentView(View.Dashboard);
+    const handleLogout = async () => {
+        try {
+            await signOut(auth);
+            setCurrentView(View.Dashboard);
+        } catch (error) {
+            console.error("Error signing out: ", error);
+        }
     };
 
     const registeredUsers = useMemo(() => {
         const usersMap = new Map<string, User>();
-        if (user) {
-            const userKey = user.taxId || user.email;
-            usersMap.set(userKey, user);
+        if (user && user.role === 'admin') {
+             usersMap.set(user.uid, user);
         }
         payslips.forEach(p => {
             const employeeTaxId = p.employee.taxId;
-            if (employeeTaxId && !usersMap.has(employeeTaxId)) {
-                usersMap.set(employeeTaxId, {
+            if (employeeTaxId && !Array.from(usersMap.values()).some(u => u.taxId === employeeTaxId)) {
+                usersMap.set(employeeTaxId, { // Nota: usa taxId come chiave temporanea
+                    uid: `generated-${employeeTaxId}`,
                     firstName: p.employee.firstName,
                     lastName: p.employee.lastName,
                     taxId: employeeTaxId,
@@ -320,15 +235,22 @@ const App: React.FC = () => {
             case View.LeavePlanner:
                 return <LeavePlanner leavePlans={leavePlans} onSave={handleSaveLeavePlan} onDelete={handleDeleteLeavePlan} />;
             case View.Settings:
-                // FIX: Passed the required 'onPasswordChange' prop to the Settings component.
-                return <Settings user={user!} onSave={handleUpdateUser} onPasswordChange={handlePasswordChange} />;
+                return <Settings user={user!} onSave={handleUpdateUser} />;
             default:
                 return <Dashboard payslip={selectedPayslip} alert={alert} payslips={payslips} />;
         }
     };
     
+    if (isLoading) {
+        return (
+            <div className="flex h-screen w-screen items-center justify-center bg-gray-100">
+                <Spinner />
+            </div>
+        );
+    }
+    
     if (!user) {
-        return <Login onLoginSuccess={setUser} />;
+        return <Login />;
     }
 
     return (

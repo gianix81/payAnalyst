@@ -141,25 +141,11 @@ const Dashboard: React.FC<DashboardProps> = ({ payslip, alert, payslips }) => {
     if (!payslip) {
         return (
             <div className="text-center p-8 bg-white rounded-xl shadow-md">
-                <h1 className="text-2xl font-bold text-gray-800 mb-4">Benvenuto in GioIA</h1>
+                <h1 className="text-2xl font-bold text-gray-800 mb-2">Benvenuto in GioIA</h1>
                 {hasArchive ? (
                      <p className="text-gray-600">Seleziona una busta paga dall'archivio per visualizzarne i dettagli.</p>
                 ) : (
-                    <div className="max-w-xl mx-auto">
-                        <p className="text-gray-600 mb-6">
-                            GioIA è il tuo assistente intelligente per la gestione delle buste paga. Semplifica la comprensione, l'archiviazione e l'analisi dei tuoi dati retributivi.
-                        </p>
-                        <div className="text-left bg-gray-50 p-4 rounded-lg border border-gray-200 mb-8">
-                            <p className="font-semibold mb-2 text-gray-700">Cosa puoi fare con GioIA:</p>
-                            <ul className="list-disc list-inside text-gray-600 space-y-1 text-sm">
-                                <li><strong>Analizzare:</strong> Carica una busta paga (PDF o immagine) e l'IA estrarrà e ti mostrerà tutti i dati in modo chiaro.</li>
-                                <li><strong>Archiviare:</strong> Salva le tue analisi in un archivio sicuro e consultabile in qualsiasi momento.</li>
-                                <li><strong>Confrontare:</strong> Metti a confronto due buste paga per capire le variazioni di stipendio mese su mese.</li>
-                                <li><strong>Pianificare:</strong> Usa gli strumenti dedicati per organizzare i tuoi turni di lavoro, ferie e permessi.</li>
-                            </ul>
-                        </div>
-                        <p className="text-gray-600 font-semibold">Carica la tua prima busta paga per iniziare l'analisi.</p>
-                    </div>
+                    <p className="text-gray-600">Carica la tua prima busta paga per iniziare l'analisi.</p>
                 )}
             </div>
         );
