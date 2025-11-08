@@ -1,0 +1,6 @@
+// src/env.js
+// Sostituisci le stringhe qui sotto con i tuoi dati presi da Supabase
+
+export const SUPABASE_URL = 'https://supabase.com/dashboard/project/jjkxxazqrfmiomsgyejp';
+export const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impqa3h4YXpxcmZtaW9tc2d5ZWpwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI2MzIyMjcsImV4cCI6MjA3ODIwODIyN30.Fr9NHo_JWNLPzs_y-6bd90xTmfH8gwhczbSiglUx9EQ';
+export const SUPABASE_SERVICE_ROLE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impqa3h4YXpxcmZtaW9tc2d5ZWpwIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MjYzMjIyNywiZXhwIjoyMDc4MjA4MjI3fQ.JWKuFpKgXGrEF4bLoMKGR5pLS5wo_OVP3SE81iHr0fo';
