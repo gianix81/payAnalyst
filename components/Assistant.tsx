@@ -134,31 +134,7 @@ const Assistant: React.FC<AssistantProps> = ({ payslips, mode, focusedPayslip, p
                     {getSubheader()}
                 </p>
             </div>
-            <div className="flex-1 overflow-y-auto p-6 space-y-6">
-                {messages.length === 0 && (
-                     <div className="text-center text-gray-500 pt-10">
-                        {getIntroText()}
-                    </div>
-                )}
-                {messages.map(msg => (
-                    <div key={msg.id} className={`flex items-end gap-3 ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-                        {msg.sender === 'ai' && <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">AI</div>}
-                        <div className={`max-w-md lg:max-w-lg p-4 rounded-2xl ${msg.sender === 'user' ? 'bg-blue-600 text-white rounded-br-none' : 'bg-gray-200 text-gray-800 rounded-bl-none'}`}>
-                            <p style={{ whiteSpace: "pre-wrap" }}>{msg.text}</p>
-                        </div>
-                    </div>
-                ))}
-                 {isLoading && messages[messages.length - 1]?.sender === 'ai' && messages[messages.length - 1]?.text === '' && (
-                    <div className="flex items-end gap-3 justify-start">
-                        <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">AI</div>
-                         <div className="max-w-md lg:max-w-lg p-4 rounded-2xl bg-gray-200 text-gray-800 rounded-bl-none">
-                           <Spinner/>
-                        </div>
-                    </div>
-                )}
-                <div ref={messagesEndRef} />
-            </div>
-            <div className="p-4 border-t border-gray-200">
+             <div className="p-4 border-b border-gray-200">
                 {attachment && mode === 'general' && (
                     <div className="mb-2 px-3 py-1.5 bg-blue-100 text-blue-800 text-sm rounded-full inline-block">
                         <span>{attachment.name}</span>
@@ -214,6 +190,30 @@ const Assistant: React.FC<AssistantProps> = ({ payslips, mode, focusedPayslip, p
                        <SendIcon/>
                     </button>
                 </div>
+            </div>
+            <div className="flex-1 overflow-y-auto p-6 space-y-6">
+                {messages.length === 0 && (
+                     <div className="text-center text-gray-500 pt-10">
+                        {getIntroText()}
+                    </div>
+                )}
+                {messages.map(msg => (
+                    <div key={msg.id} className={`flex items-end gap-3 ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
+                        {msg.sender === 'ai' && <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">AI</div>}
+                        <div className={`max-w-md lg:max-w-lg p-4 rounded-2xl ${msg.sender === 'user' ? 'bg-blue-600 text-white rounded-br-none' : 'bg-gray-200 text-gray-800 rounded-bl-none'}`}>
+                            <p style={{ whiteSpace: "pre-wrap" }}>{msg.text}</p>
+                        </div>
+                    </div>
+                ))}
+                 {isLoading && messages[messages.length - 1]?.sender === 'ai' && messages[messages.length - 1]?.text === '' && (
+                    <div className="flex items-end gap-3 justify-start">
+                        <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">AI</div>
+                         <div className="max-w-md lg:max-w-lg p-4 rounded-2xl bg-gray-200 text-gray-800 rounded-bl-none">
+                           <Spinner/>
+                        </div>
+                    </div>
+                )}
+                <div ref={messagesEndRef} />
             </div>
         </div>
     );

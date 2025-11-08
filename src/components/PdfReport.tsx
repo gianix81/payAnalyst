@@ -26,7 +26,7 @@ const PdfReport: React.FC<PdfReportProps> = ({ payslip, summary }) => {
                 <header className="flex justify-between items-center pb-6 border-b-2 border-blue-600">
                     <div className="flex items-center space-x-3 text-blue-600">
                         <LogoIcon className="w-10 h-10" />
-                        <span className="font-bold text-3xl">PayAnalyst</span>
+                        <span className="font-bold text-3xl">GioIA</span>
                     </div>
                     <div className="text-right">
                         <h1 className="text-2xl font-bold capitalize">{`${getMonthName(payslip.period.month)} ${payslip.period.year}`}</h1>
@@ -104,7 +104,7 @@ const PdfReport: React.FC<PdfReportProps> = ({ payslip, summary }) => {
 
                 {/* Footer */}
                 <footer className="text-center text-xs text-gray-500 border-t border-gray-200 pt-4 mt-8">
-                    <p>Report generato da PayAnalyst in data {generationDate}.</p>
+                    <p>Report generato da GioIA in data {generationDate}.</p>
                     <p>Questo documento è generato automaticamente a solo scopo informativo e non sostituisce una consulenza professionale.</p>
                 </footer>
             </div>

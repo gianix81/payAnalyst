@@ -1,5 +1,5 @@
 {
-  "name": "analizzatore-buste-paga-ai",
+  "name": "gioia",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,20 +9,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@google/genai": "^1.23.0",
-    "html2canvas": "^1.4.1",
-    "jspdf": "^3.0.3",
     "react": "^19.2.0",
+    "@google/genai": "^1.23.0",
     "react-dom": "^19.2.0",
-    "recharts": "^3.2.1"
+    "recharts": "^3.2.1",
+    "jwt-decode": "^4.0.0"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4.1.14",
     "@types/node": "^22.14.0",
     "@vitejs/plugin-react": "^5.0.0",
-    "autoprefixer": "^10.4.21",
-    "postcss": "^8.5.6",
-    "tailwindcss": "^4.1.14",
     "typescript": "~5.8.2",
     "vite": "^6.2.0"
   }

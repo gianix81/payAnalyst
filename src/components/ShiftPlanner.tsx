@@ -132,7 +132,9 @@ const PlannerModal: React.FC<PlannerModalProps> = ({ isOpen, onClose, onSaveShif
                                     </button>
                                 </div>
                             ))}
-                             <button type="button" onClick={addInterval} className="text-sm text-blue-600 font-semibold hover:underline">+ Aggiungi intervallo (pausa)</button>
+                             {intervals.length < 3 && (
+                                <button type="button" onClick={addInterval} className="text-sm text-blue-600 font-semibold hover:underline">+ Aggiungi intervallo (pausa)</button>
+                             )}
                              <div>
                                 <label htmlFor="shiftNotes" className="block text-sm font-medium text-gray-700">Note</label>
                                 <textarea id="shiftNotes" value={shiftNotes} onChange={e => setShiftNotes(e.target.value)} rows={2} className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"></textarea>
@@ -168,6 +170,7 @@ const PlannerModal: React.FC<PlannerModalProps> = ({ isOpen, onClose, onSaveShif
         </div>
     );
 };
+
 
 interface ShiftPlannerProps {
     shifts: Shift[];

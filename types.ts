@@ -111,13 +111,30 @@ export interface HistoricalAnalysisResult {
     }[];
 }
 
+export interface TimeInterval {
+    id: string;
+    startTime: string; // HH:mm
+    endTime: string; // HH:mm
+}
+
 export interface Shift {
     id: string;
     date: string; // YYYY-MM-DD
-    startTime: string; // HH:mm
-    endTime: string; // HH:mm
+    intervals: TimeInterval[];
     notes?: string;
 }
+
+export type AbsenceReason = 'Ferie' | 'ROL' | 'Permesso Speciale' | 'Malattia' | 'Legge 104' | 'Riposo' | 'Altro';
+
+export const ABSENCE_REASONS: AbsenceReason[] = ['Ferie', 'ROL', 'Permesso Speciale', 'Malattia', 'Legge 104', 'Riposo', 'Altro'];
+
+export interface Absence {
+    id: string;
+    date: string; // YYYY-MM-DD
+    reason: AbsenceReason;
+    notes?: string;
+}
+
 
 export interface LeavePlan {
     id: string;

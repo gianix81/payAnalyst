@@ -82,7 +82,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen, isCollapsed, setIs
                         </div>
                     </div>
 
-                    <div className="hidden md:flex justify-center p-2">
+                    <div className="hidden md:flex justify-center p-2 border-t border-gray-200">
                         <button 
                             onClick={() => setIsCollapsed(!isCollapsed)}
                             className="w-full flex items-center justify-center p-3 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors"

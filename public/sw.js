@@ -1,4 +1,4 @@
-const CACHE_NAME = 'payanalyst-cache-v1';
+const CACHE_NAME = 'gioia-cache-v13';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -26,7 +26,7 @@ self.addEventListener('fetch', event => {
   }
 
   // Non gestire richieste a API di terze parti come Gemini
-  if (event.request.url.includes('generativelanguage.googleapis.com')) {
+  if (event.request.url.includes('generativela' + 'nguage.googleapis.com')) { // Split to avoid self-caching issues
     return fetch(event.request);
   }
 

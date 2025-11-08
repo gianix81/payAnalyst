@@ -33,7 +33,7 @@ const Settings: React.FC<SettingsProps> = ({ user, onSave }) => {
     return (
         <div>
             <h1 className="text-3xl font-bold text-gray-800 mb-6">Impostazioni</h1>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="max-w-2xl mx-auto">
                 {/* User Data Form */}
                 <div className="bg-white p-8 rounded-xl shadow-md">
                     <h2 className="text-xl font-bold text-gray-800 mb-4">I Tuoi Dati Anagrafici</h2>
@@ -64,29 +64,6 @@ const Settings: React.FC<SettingsProps> = ({ user, onSave }) => {
                         </div>
                         {successMessage && <p className="text-sm text-green-600 mt-2">{successMessage}</p>}
                     </form>
-                </div>
-
-                {/* Contact Info */}
-                <div className="bg-white p-8 rounded-xl shadow-md">
-                     <h2 className="text-xl font-bold text-gray-800 mb-4">Contatti e Supporto</h2>
-                     <p className="text-sm text-gray-500 mb-6">Hai bisogno di aiuto o hai domande? Contattaci.</p>
-                     <div className="space-y-4">
-                        <div className="flex items-start">
-                           <InfoIcon className="w-5 h-5 mr-3 text-blue-500 flex-shrink-0 mt-1" />
-                           <div>
-                                <h3 className="font-semibold text-gray-700">Supporto Email</h3>
-                                <p className="text-gray-600">Per problemi tecnici o domande sull'utilizzo dell'app, scrivi a:</p>
-                                <a href="mailto:support@payanalyst.it" className="text-blue-600 hover:underline">support@payanalyst.it</a>
-                           </div>
-                        </div>
-                         <div className="flex items-start">
-                           <InfoIcon className="w-5 h-5 mr-3 text-blue-500 flex-shrink-0 mt-1" />
-                           <div>
-                                <h3 className="font-semibold text-gray-700">Consulenza</h3>
-                                <p className="text-gray-600">Per domande specifiche sulla tua busta paga, ti consigliamo di rivolgerti a un consulente del lavoro o a un CAF.</p>
-                           </div>
-                        </div>
-                     </div>
                 </div>
             </div>
         </div>

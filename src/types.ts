@@ -7,13 +7,18 @@ export enum View {
     Settings = 'settings',
     ShiftPlanner = 'shift_planner',
     LeavePlanner = 'leave_planner',
+    AdminPanel = 'admin_panel',
 }
 
 export interface User {
     firstName: string;
     lastName: string;
+    email: string;
     dateOfBirth: string;
     placeOfBirth: string;
+    role: 'admin' | 'user';
+    taxId?: string;
+    password?: string;
 }
 
 export interface PayItem {
