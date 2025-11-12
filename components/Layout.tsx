@@ -48,7 +48,7 @@ const Layout: React.FC<LayoutProps> = ({ children, user, currentView, setCurrent
                     {children}
                 </main>
                  <footer className="text-center p-4 bg-gray-100 text-xs text-gray-500 print:hidden">
-                    <p>© {new Date().getFullYear()} PayAnalyst | Ideato, sviluppato e finanziato da Gennaro Carandente e Giovanni De Rosa.</p>
+                    <p>© {new Date().getFullYear()} GioIA | Ideato, sviluppato e finanziato da Gennaro Carandente e Giovanni De Rosa.</p>
                     <p>Tutti i diritti sono riservati. È vietata qualsiasi riproduzione, anche parziale.</p>
                 </footer>
             </div>

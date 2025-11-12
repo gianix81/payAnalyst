@@ -1,4 +1,5 @@
 
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Payslip, PayItem } from '../types.ts';
 import Card from './common/Card.tsx';
@@ -140,7 +141,7 @@ const Dashboard: React.FC<DashboardProps> = ({ payslip, alert, payslips }) => {
     if (!payslip) {
         return (
             <div className="text-center p-8 bg-white rounded-xl shadow-md">
-                <h1 className="text-2xl font-bold text-gray-800 mb-2">Benvenuto in PayAnalyst</h1>
+                <h1 className="text-2xl font-bold text-gray-800 mb-2">Benvenuto in GioIA</h1>
                 {hasArchive ? (
                      <p className="text-gray-600">Seleziona una busta paga dall'archivio per visualizzarne i dettagli.</p>
                 ) : (

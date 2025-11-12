@@ -25,7 +25,13 @@ export const CloseIcon: React.FC<{className?: string}> = ({className = "w-6 h-6"
     <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
 );
 export const LogoIcon: React.FC<{className?: string}> = ({className = "w-8 h-8"}) => (
-    <svg className={className} viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5-10-5-10 5z" opacity="0.6" /><path d="M2 12l10 5 10-5-10-5-10 5z" /></svg>
+    <svg className={className} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <rect width="24" height="24" rx="4" fill="#2563EB"/>
+        <g fill="white">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5-10-5-10 5z" opacity="0.6" />
+            <path d="M2 12l10 5 10-5-10-5-10 5z" />
+        </g>
+    </svg>
 );
 export const EuroIcon: React.FC<{className?: string}> = ({className = "w-6 h-6"}) => (
     <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.121 15.536c-1.171 1.171-3.07 1.171-4.242 0-1.172-1.171-1.172-3.07 0-4.242 1.171-1.171 3.07-1.171 4.242 0 1.172 1.171 1.172 3.07 0 4.242z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18.536V5.464" /></svg>

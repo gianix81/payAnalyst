@@ -40,7 +40,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen, isCollapsed, setIs
                 <div className={`flex items-center border-b border-gray-200 h-[65px] px-4 ${isCollapsed && 'md:px-0 md:justify-center'}`}>
                      <div className="flex items-center space-x-2 text-blue-600 overflow-hidden">
                         <LogoIcon />
-                        <span className={`font-bold text-xl whitespace-nowrap ${isCollapsed && 'md:hidden'}`}>PayAnalyst</span>
+                        <span className={`font-bold text-xl whitespace-nowrap ${isCollapsed && 'md:hidden'}`}>GioIA</span>
                     </div>
                     <button onClick={() => setIsOpen(false)} className={`text-gray-500 hover:text-blue-600 md:hidden ${isCollapsed && 'hidden'}`}>
                         <CloseIcon />
