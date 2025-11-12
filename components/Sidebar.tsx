@@ -1,26 +1,22 @@
 import React from 'react';
-import { getNavItems } from '../constants.tsx';
-import { View, User } from '../types.ts';
-import { CloseIcon, LogoIcon, ChevronDoubleLeftIcon, ChevronDoubleRightIcon, LogoutIcon } from './common/Icons.tsx';
+import { NAV_ITEMS } from '../constants.tsx';
+import { View } from '../types.ts';
+import { CloseIcon, LogoIcon, ChevronDoubleLeftIcon, ChevronDoubleRightIcon } from './common/Icons.tsx';
 
 interface SidebarProps {
-    user: User | null;
     isOpen: boolean; // for mobile
     setIsOpen: (isOpen: boolean) => void;
     isCollapsed: boolean; // for desktop
     setIsCollapsed: (isCollapsed: boolean) => void;
     currentView: View;
     setCurrentView: (view: View) => void;
-    onLogout: () => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ user, isOpen, setIsOpen, isCollapsed, setIsCollapsed, currentView, setCurrentView, onLogout }) => {
+const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen, isCollapsed, setIsCollapsed, currentView, setCurrentView }) => {
     const handleNavigation = (view: View) => {
         setCurrentView(view);
         setIsOpen(false); // Close mobile overlay on navigation
     };
-
-    const navItems = getNavItems(user);
 
     return (
         <>
@@ -36,7 +32,6 @@ const Sidebar: React.FC<SidebarProps> = ({ user, isOpen, setIsOpen, isCollapsed,
             <aside
                 className={`fixed top-0 left-0 bg-white h-full shadow-lg z-30 flex flex-col transform transition-all duration-300 ease-in-out 
                     md:relative md:shadow-none md:translate-x-0
-                    pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]
                     w-64
                     ${ isCollapsed ? 'md:w-20' : 'md:w-64' }
                     ${ isOpen ? 'translate-x-0' : '-translate-x-full' }`}
@@ -45,7 +40,7 @@ const Sidebar: React.FC<SidebarProps> = ({ user, isOpen, setIsOpen, isCollapsed,
                 <div className={`flex items-center border-b border-gray-200 h-[65px] px-4 ${isCollapsed && 'md:px-0 md:justify-center'}`}>
                      <div className="flex items-center space-x-2 text-blue-600 overflow-hidden">
                         <LogoIcon />
-                        <span className={`font-bold text-xl whitespace-nowrap ${isCollapsed && 'md:hidden'}`}>GioIA</span>
+                        <span className={`font-bold text-xl whitespace-nowrap ${isCollapsed && 'md:hidden'}`}>PayAnalyst</span>
                     </div>
                     <button onClick={() => setIsOpen(false)} className={`text-gray-500 hover:text-blue-600 md:hidden ${isCollapsed && 'hidden'}`}>
                         <CloseIcon />
@@ -55,7 +50,7 @@ const Sidebar: React.FC<SidebarProps> = ({ user, isOpen, setIsOpen, isCollapsed,
                 {/* Navigation */}
                 <nav className="mt-6 flex-1">
                     <ul>
-                        {navItems.map((item) => (
+                        {NAV_ITEMS.map((item) => (
                             <li key={item.id} className="px-4 md:px-2 mb-2">
                                 <a
                                     href="#"
@@ -86,23 +81,6 @@ const Sidebar: React.FC<SidebarProps> = ({ user, isOpen, setIsOpen, isCollapsed,
                            <p className="text-sm text-gray-600">I tuoi dati sono crittografati e al sicuro.</p>
                         </div>
                     </div>
-
-                    {/* Logout Button */}
-                    <div className="px-4 md:px-2 py-2 border-t border-gray-200">
-                         <a
-                            href="#"
-                            title="Esci"
-                            onClick={(e) => {
-                                e.preventDefault();
-                                onLogout();
-                            }}
-                            className={`flex items-center p-3 rounded-lg transition-colors group relative text-gray-600 hover:bg-red-50 hover:text-red-600 ${ isCollapsed && 'md:justify-center' }`}
-                        >
-                            <div className="flex-shrink-0"><LogoutIcon /></div>
-                            <span className={`ml-3 whitespace-nowrap ${isCollapsed && 'md:hidden'}`}>Esci</span>
-                        </a>
-                    </div>
-
 
                     <div className="hidden md:flex justify-center p-2 border-t border-gray-200">
                         <button 

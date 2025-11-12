@@ -11,7 +11,6 @@ export enum View {
 }
 
 export interface User {
-    uid: string;
     firstName: string;
     lastName: string;
     email: string;
@@ -19,6 +18,7 @@ export interface User {
     placeOfBirth: string;
     role: 'admin' | 'user';
     taxId?: string;
+    password?: string;
 }
 
 export interface PayItem {

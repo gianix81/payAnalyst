@@ -2,8 +2,6 @@ import { User } from '../types.ts';
 
 export const mockUsers: User[] = [
   {
-    // FIX: Add missing 'uid' property to conform to the User type.
-    uid: 'mock-user-1',
     firstName: 'Laura',
     lastName: 'Bianchi',
     email: 'laura.bianchi@example.com',
@@ -12,8 +10,6 @@ export const mockUsers: User[] = [
     role: 'user',
   },
   {
-    // FIX: Add missing 'uid' property to conform to the User type.
-    uid: 'mock-user-2',
     firstName: 'Marco',
     lastName: 'Verdi',
     email: 'marco.verdi@example.com',
@@ -22,8 +18,6 @@ export const mockUsers: User[] = [
     role: 'user',
   },
   {
-    // FIX: Add missing 'uid' property to conform to the User type.
-    uid: 'mock-user-3',
     firstName: 'Giulia',
     lastName: 'Russo',
     email: 'giulia.russo@example.com',
@@ -32,8 +26,6 @@ export const mockUsers: User[] = [
     role: 'user',
   },
   {
-    // FIX: Add missing 'uid' property to conform to the User type.
-    uid: 'mock-user-4',
     firstName: 'Alessandro',
     lastName: 'Ferrari',
     email: 'alessandro.f@example.com',
@@ -42,8 +34,6 @@ export const mockUsers: User[] = [
     role: 'user',
   },
   {
-    // FIX: Add missing 'uid' property to conform to the User type.
-    uid: 'mock-user-5',
     firstName: 'Sofia',
     lastName: 'Esposito',
     email: 'sofia.esposito@example.com',
